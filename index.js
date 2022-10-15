@@ -32,6 +32,10 @@ const persons = [
 ]
 
 const typeDefs = gql`
+enum YESNO{
+    YES
+    NO
+}
 type Address {
     street: String!
     city: String!
@@ -46,7 +50,7 @@ type Person{
 
 type Query{
     personCount: Int!
-    allPersons: [Person]!
+    allPersons(phone: YESNO): [Person]!
     findPerson(name: String!): Person
 }
 type Mutation{
@@ -56,6 +60,10 @@ type Mutation{
         street:String!
         city:String!
     ):Person
+    editNumber(
+        name:String!
+        phone:String!
+    ): Person
 
 }
 
@@ -64,7 +72,12 @@ type Mutation{
 const resolvers = {
     Query: {
         personCount: () => persons.length,
-        allPersons: () => persons,
+        allPersons: (root, args) => {
+            if (!args.phone) return persons
+            const byPhone = person =>
+                args.phone === "YES" ? person.phone : !person.phone
+            return persons.filter(byPhone)
+        },
         findPerson: (root, args) => {
             const { name } = args
             return persons.find(person => person.name === name)
@@ -80,6 +93,14 @@ const resolvers = {
             const person = { ...args, id: uuid() }
             persons.push(person)
             return person
+        },
+        editNumber: (root, args) => {
+            const personIndex = persons.findIndex(p => p.name == args.name)
+            if (personIndex === -1) return null
+            const person = persons[personIndex]
+            const updatedPerson = { ...person, phone: args.phone }
+            persons[personIndex] = updatedPerson
+            return updatedPerson
         }
     },
     Person: {
