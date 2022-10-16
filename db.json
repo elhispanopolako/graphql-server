@@ -1,0 +1,41 @@
+{
+    "persons":[
+  {
+    "name": "Tadeo",
+    "phone": "+48666222666",
+    "street": "Frontend",
+    "city": "Madrid",
+    "id": "65646565656"
+  },
+  {
+    "name": "Aleks",
+    "phone": "+48666632666",
+    "street": "Backend",
+    "city": "Warszawa",
+    "id": "65646565657"
+  },
+  {
+    "name": "Karol",
+    "phone": "+48986222666",
+    "street": "API",
+    "city": "Mielec",
+    "id": "65646565658"
+  },
+  {
+    "name": "Józef",
+    "phone": "+48986222666",
+    "street": "GraphQL",
+    "city": "Galilea",
+    "id": "65646565659"
+  },
+   {
+    "name": "Mario",
+    "street": "SinNumero",
+    "city": "Galilea",
+    "id": "65646565660"
+  }
+]
+
+}
+
+

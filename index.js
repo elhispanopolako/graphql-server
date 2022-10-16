@@ -1,35 +1,6 @@
 import { gql, ApolloServer, UserInputError } from "apollo-server"
 import { v1 as uuid } from "uuid";
-const persons = [
-    {
-        name: "Tadeo",
-        phone: "+48666222666",
-        street: "Frontend",
-        city: "Madrid",
-        id: "65646565656"
-    },
-    {
-        name: "Aleks",
-        phone: "+48666632666",
-        street: "Backend",
-        city: "Warszawa",
-        id: "65646565657"
-    },
-    {
-        name: "Karol",
-        phone: "+48986222666",
-        street: "API",
-        city: "Mielec",
-        id: "65646565658"
-    },
-    {
-        name: "Józef",
-        phone: "+48986222666",
-        street: "GraphQL",
-        city: "Galilea",
-        id: "65646565659"
-    },
-]
+import axios from "axios";
 
 const typeDefs = gql`
 enum YESNO{
@@ -72,11 +43,12 @@ type Mutation{
 const resolvers = {
     Query: {
         personCount: () => persons.length,
-        allPersons: (root, args) => {
-            if (!args.phone) return persons
+        allPersons: async (root, args) => {
+            const { data: personsFromAPI } = await axios.get('http://localhost:3000/persons')
+            if (!args.phone) return personsFromAPI
             const byPhone = person =>
                 args.phone === "YES" ? person.phone : !person.phone
-            return persons.filter(byPhone)
+            return personsFromAPI.filter(byPhone)
         },
         findPerson: (root, args) => {
             const { name } = args
